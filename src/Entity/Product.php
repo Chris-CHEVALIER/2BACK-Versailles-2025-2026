@@ -3,10 +3,17 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ORM\Entity]
 class Product
 {
+    #[ORM\Id] # Clé primaire (PK)
+    #[ORM\GeneratedValue] # Auto incrémental
+    #[ORM\Column] # Colonne de type integer
     private int $id;
 
     #[Assert\NotBlank(message: "Le nom doit être rempli")]
@@ -16,15 +23,30 @@ class Product
         minMessage: "Le nom doit faire plus de 3 caractères.",
         maxMessage: "Le nom doit faire moins de 67 caractères."
     )]
+    #[ORM\Column(length: 67)]
     private string $name;
 
     #[Assert\NotBlank(message: "La description doit être remplie")]
+    #[ORM\Column(type: "text")]
     private string $description;
 
     #[Assert\NotBlank(message: "Le prix doit être rempli")]
+    #[ORM\Column]
     private float $price;
-    
+
+    #[ORM\Column(nullable: true)]
     private DateTime $expirationDate;
+
+    /**
+     * @var Collection<int, Comment>
+     */
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'product', orphanRemoval: true)]
+    private Collection $comments;
+
+    public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }
 
     /**
      * Get the value of id
@@ -112,6 +134,36 @@ class Product
     public function setExpirationDate(DateTime $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): static
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments->add($comment);
+            $comment->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): static
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getProduct() === $this) {
+                $comment->setProduct(null);
+            }
+        }
 
         return $this;
     }

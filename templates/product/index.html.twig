@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+<h1>Produits à vendre</h1>
+<div class="d-flex flex-wrap gap-3 justify-content-center mt-5">
+{% for product in products %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            <p class="card-text">{{ product.price }} €</p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description }}</p>
+           
+            <a href={{path(name = 'product_read', parameters = {id: product.id})}} class="btn btn-primary">Lire</a>
+            <a href={{path(name = 'product_update', parameters = {id: product.id})}} class="btn btn-warning">Modifier</a>
+            <a href={{path(name = 'product_delete', parameters = {id: product.id})}} class="btn btn-danger">Supprimer</a>
+            <footer >{{product.expirationDate | date("d/m/Y")}}</footer>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %}
