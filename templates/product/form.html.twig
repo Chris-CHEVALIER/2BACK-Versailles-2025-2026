@@ -1,16 +1,16 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-	{{parent()}}Produit
+	{{parent()}} Créer/modifier un produit
 {% endblock %}
 
 {% block body %}
 	<h1>Produit</h1>
 	{{ form_start(form) }} {# <form> #}
-	{{ form_row(form.name) }} {# <input type='text' required> #}
-	{{ form_row(form.description) }} {# <textarea required> #}
-	{{ form_row(form.price) }}
-	{{ form_row(form.expirationDate) }}
-	<input type="submit" value="Ok" class="btn btn-primary">
+		{{ form_row(form.name) }} {# <input type='text' required> #}
+		{{ form_row(form.description) }} {# <textarea required> #}
+		{{ form_row(form.price) }}
+		{{ form_row(form.expirationDate) }}
+		<input type="submit" value="Ok" class="btn btn-primary">
 	{{ form_end(form) }} {# </form> #}
 {% endblock %}
