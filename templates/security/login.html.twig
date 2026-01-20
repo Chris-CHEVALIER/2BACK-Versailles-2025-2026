@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Se connecter
+{% endblock %}
+
+{% block body %}
+
+{% if error %}
+<div class="alert alert-danger">{{error.messageKey}}</div>
+{% endif %}
+
+	<form class="container" method="post">
+		<label for="username">E-mail</label>
+		<input class="form-control" type="email" name="_username" id="username" required placeholder="Votre adresse e-mail" value={{email}}>
+
+		<label for="password">Mot de passe</label>
+		<input class="form-control" type="password" name="_password" id="password" required placeholder="Votre mot de passe">
+
+		<input class="btn btn-primary mt-3" type="submit" value="Se connecter">
+	</form>
+	<a href={{path("user_create")}}>Vous n'avez pas encore de compte ? Créez-en un !</a>
+{% endblock %}
