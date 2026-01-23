@@ -15,6 +15,7 @@ class ProductController extends AbstractController
     #[Route("/product/create", name: "product_create")]
     public function create(Request $request, ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); // Permet de refuser l'accès à la route si l'utilisateur n'est pas connecté (rédige sur '/login')
         $product = new Product(); // Produit vide (name = null, etc.)
         $form = $this->createForm(ProductType::class, $product);
 
@@ -35,6 +36,7 @@ class ProductController extends AbstractController
     #[Route("/product/update/{id}", name: "product_update")]
     public function update(Request $request, ManagerRegistry $doctrine, Product $product): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); 
         $form = $this->createForm(ProductType::class, $product);
 
         // Traitement pour hydrater l'objet "$product" vide
@@ -52,6 +54,7 @@ class ProductController extends AbstractController
     #[Route("/product/delete/{id}", name: "product_delete")]
     public function delete(ManagerRegistry $doctrine, Product $product): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY'); 
         $em = $doctrine->getManager();
         $em->remove($product);
         $em->flush();
